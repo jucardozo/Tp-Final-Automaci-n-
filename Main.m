@@ -38,9 +38,12 @@ q_status=Ready(WidowX_MKII); %despierto mi robot.
 %Continuar?
 
 %Pedir Puntos => Dima
+image_path = input('Ingrese la imagen de referencia:\n', 's');
+puntos = get_line_coord(image_path);
+disp(puntos)
 %Provisorios
-X_1=0.28 ; 
-Y_1=0 ; 
+X_1 = puntos(1, 1);%0.28 ; 
+Y_1 = puntos(1, 2);%0 ; 
 
 %Paso 1, nos acercamos o aproximamos a la estacion de trabajo.
 q_status=Move(q_status(6,:),X_1,Y_1,Z_off,WidowX_MKII) 
@@ -50,8 +53,8 @@ q_status=Move_L(q_status(6,:),X_1,Y_1,Z_on,WidowX_MKII)
 
 %Pedir Puntos => Dima
 %Provisorios
-X_2=0.2;
-Y_2=0.1;
+X_2 = puntos(2, 1);%0.2;
+Y_2 = puntos(2, 2);%0.1;
 
 %Paso 3
 %nos traslado hacia el otro punto con punta acentada.
