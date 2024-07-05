@@ -32,8 +32,9 @@ Y_Hoja=0; %largo
 Z_off=0.10; %punta levantada
 Z_on=0; %punta apoyada
 
-% image_path = input('Ingrese la imagen de referencia (tiene que estar dentro de la carpeta "imagenes"):\n', 's');
-puntos = get_line_coord('imagenes/prueba3.jpg');
+image_path = input('Ingrese la imagen de referencia (tiene que estar dentro de la carpeta "imagenes"):\n', 's');
+image_path = strcat('imagenes/', image_path);
+puntos = get_line_coord(image_path);
 disp(puntos)
 
 % Punto inicial
