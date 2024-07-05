@@ -25,69 +25,71 @@ clc
 % end
 
 %Zona de trabajo
-%Dimensiones de la X e Y de una hoja A4
-
-X_Hoja=0.1; %ancho
+% Coordenadas de la hoja
+X_Hoja=0.2; %ancho
 Y_Hoja=0; %largo
+
 Z_off=0.10; %punta levantada
-Z_on=0.05; %punta apoyada
+Z_on=0; %punta apoyada
+
+image_name = input('Ingrese la imagen de referencia (tiene que estar dentro de la carpeta "imagenes"):\n', 's');
+image_path = fprintf('imagenes\%g', image_name);
+puntos = get_line_coord(image_path);
+disp(puntos)
+
+% Punto inicial
+X_1 = puntos(1, 1)*0.001+X_Hoja;
+Y_1 = puntos(1, 2)*0.001;
+% Punto final
+X_2 = puntos(2, 1)*0.001 + X_Hoja;
+Y_2 = puntos(2, 2)*0.001;
+
+% Genero puntos intermedios, como máximo quedan pasos de 1cm
+points = more_points(X_1, X_2, Y_1, Y_2, 20);
 
 % Genero el robot
 [WidowX_MKII, Links] = RobotArm(100);
-%figure;
-% plot3([Pi(2)+(sqrt(R^2-(a/2)^2)- b), Pf(2)+(sqrt(R^2-(a/2)^2)- b)], [(a / 2)-Pi(1), (a / 2)-Pf(1)], [0, 0], 'b', 'LineWidth', 1);
+
+% Limito el workspace
+WidowX_MKII.qlim(1, :) = [ deg2rad(-14) deg2rad(60)];
+WidowX_MKII.qlim(2, :) = [ deg2rad(16.3) deg2rad(30)];
+WidowX_MKII.qlim(3, :) = [ deg2rad(-30) deg2rad(0)];
+WidowX_MKII.qlim(4, :) = [ deg2rad(-20) deg2rad(90)];
+% Ploteo la hoja
+plot3(points(1, :), points(2, :), zeros(size(points)), 'b', 'LineWidth', 1);
 H1 = rectangle('Position', [X_Hoja Y_Hoja 0.2 0.15], 'FaceColor','w');
 q_status=Ready(WidowX_MKII); %despierto mi robot. 
 %Continuar?
 
-%Pedir Puntos => Dima
-% image_path = input('Ingrese la imagen de referencia:\n', 's');
-puntos = get_line_coord('imagenes/prueba1.jpg');
-disp(puntos)
-%Provisorios
-X_1 = puntos(1, 1)*0.001+X_Hoja;%0.28 ; 
-Y_1 = puntos(1, 2)*0.001;%0 ; 
-
 cont = input('Input any key to continue, ''n'' to exit program:', 's');
 if (cont=='n' || cont=='N')
     error('Program terminated');
 end
-%Paso 1, nos acercamos o aproximamos a la estacion de trabajo.
-q_status=Move(q_status(6,:),X_1,Y_1,Z_off,WidowX_MKII) 
-%Paso 2
-%Bajo end_effector. Movimiento unicamente en eje Z. 
-q_status=Move_L(q_status(6,:),X_1,Y_1,Z_on,WidowX_MKII)
 
-cont = input('Input any key to continue, ''n'' to exit program:', 's');
-if (cont=='n' || cont=='N')
-    error('Program terminated');
+% Paso 1, nos acercamos al punto inicial con la punta levantada.
+q_status=Move(q_status(6,:),X_1,Y_1,Z_off,WidowX_MKII);
+% Paso 2
+% Bajo end_effector. Movimiento unicamente en eje Z. 
+q_status=Move_L(q_status(6,:),X_1,Y_1,Z_on,WidowX_MKII);
+% Paso 3
+% Muevo el end-effector punto a punto
+[~, fora] = size(points);
+for i = 2:(fora-1)
+    q_status=Move(q_status(6,:), points(1, i), points(2, i), Z_on, WidowX_MKII);
 end
-%Pedir Puntos => Dima
-%Provisorios
-X_2 = puntos(2, 1)*0.001 + X_Hoja;%0.2;
-Y_2 = puntos(2, 2)*0.001;%0.1;
-
-cont = input('Input any key to continue, ''n'' to exit program:', 's');
-if (cont=='n' || cont=='N')
-    error('Program terminated');
-end
-%Paso 3
-%nos traslado hacia el otro punto con punta acentada.
-q_status=Move(q_status(6,:),X_2,Y_2,Z_on,WidowX_MKII)
-
+% Traslado hacia el ultimo punto con punta acentada.
+q_status=Move(q_status(6,:),X_2,Y_2,Z_on,WidowX_MKII);
 %Paso 4
 %Levanto end_effector
-q_status=Move_L(q_status(6,:),X_2,Y_2,Z_off,WidowX_MKII)
+q_status=Move_L(q_status(6,:),X_2,Y_2,Z_off,WidowX_MKII);
 
-cont = input('Input any key to continue, ''n'' to exit program:', 's');
-if (cont=='n' || cont=='N')
-    error('Program terminated');
-end
+% cont = input('Input any key to continue to plot workspace, ''n'' to exit program:', 's');
+% if (cont=='n' || cont=='N')
+%     error('Program terminated');
+% end
 
-%workspace de todo el brazo robotico
-q_status=Ready(WidowX_MKII); %despierto mi robot. 
-
-workspace(WidowX_MKII,q_status)
+% %workspace de todo el brazo robotico
+% workspace(WidowX_MKII, 9)
 
 
 

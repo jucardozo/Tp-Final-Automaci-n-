@@ -14,7 +14,7 @@ Tp1_on = SE3(T_p1_on);
 
 qp1_on = bot.ikine(Tp1_on, 'mask', [1 1 1 0 0 0]);
 
-qp1on_d=(qp1_on)*90/(pi/2) %fin => chequear. 
+qp1on_d=(qp1_on)*90/(pi/2); %fin => chequear. 
 
 qt_p1_on = jtraj(q_status, qp1_on,t); %Generacion de Trayectoria desde el estado estacionario , al estado ready 
 bot.plot(qt_p1_on)

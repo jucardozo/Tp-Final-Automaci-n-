@@ -1,6 +1,5 @@
-function [] = workspace(bot,q0)
+function [] = workspace(bot,N)
 workspace_points = [];
-N=9;
 th1 = bot.qlim(1, 1):abs((bot.qlim(1, 2)-bot.qlim(1, 1))/N): bot.qlim(1, 2); % Angulo 1
 th2 = bot.qlim(2, 1):abs((bot.qlim(2, 2)-bot.qlim(2, 1))/N): bot.qlim(2, 2); % Angulo 2
 th3 = bot.qlim(3, 1):abs((bot.qlim(3, 2)-bot.qlim(3, 1))/N): bot.qlim(3, 2); % Angulo 3
@@ -26,7 +25,8 @@ for i = 1:N
     end
 end
 % Plot de workspace
-view(3)
+% figure;
+% view(3)
 plot3(workspace_points(:,1), workspace_points(:,2), workspace_points(:,3), 'b.','MarkerSize', 0.7);
 xlabel('Posicion X');
 ylabel('Posicion Y');

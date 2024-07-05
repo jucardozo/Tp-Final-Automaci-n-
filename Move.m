@@ -9,9 +9,9 @@ Tp1 = [ 1  0  0 (X)
    
 %Tp1 = SE3(T_p1);
 
-qp1 = bot.ikine(Tp1, 'mask', [1 1 1 0 0 0])
+qp1 = bot.ikine(Tp1, 'mask', [1 1 1 0 0 0]);
 
-qp1_d=(qp1)*90/(pi/2) %fin => chequear. 
+qp1_d=(qp1)*90/(pi/2); %fin => chequear. 
 
 qt_p1_off = jtraj(q_status, qp1,t); %Generacion de Trayectoria desde el estado estacionario , al estado ready 
 
