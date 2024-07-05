@@ -31,7 +31,7 @@ else
 end
 x1 = sel_x + avg_grosor;
 y1 = round(x1*m + b);
-fprintf('grosor estimado:%g\n', avg_grosor);
+% fprintf('grosor estimado:%g\n', avg_grosor);
 
 %% final
 x = blob(1).umax;

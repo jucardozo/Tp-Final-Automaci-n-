@@ -12,7 +12,7 @@ T_p1_on = [ 1  0  0 (X)
    
 Tp1_on = SE3(T_p1_on);
 
-qp1_on = bot.ikine(Tp1_on, 'mask', [0 1 1 1 1 1]);
+qp1_on = bot.ikine(Tp1_on, 'mask', [1 1 1 0 0 0]);
 
 qp1on_d=(qp1_on)*90/(pi/2) %fin => chequear. 
 

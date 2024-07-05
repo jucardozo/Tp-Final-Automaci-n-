@@ -58,7 +58,7 @@ function coord = get_line_coord(path)
         redline.plot
     end
     
-    pix_pos = line_start_finish(redline.lines.rho, redline.lines.theta, im_red_line)
+    pix_pos = line_start_finish(redline.lines.rho, redline.lines.theta, im_red_line);
 
     x_pos_mm = 200*(pix_pos(:, 1)/x_max);
     y_pos_mm = 150*(1-pix_pos(:, 2)/y_max);
